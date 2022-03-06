@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #ifdef DOLOG
 #define LOG(...) fprintf(log, __VA_ARGS__);
@@ -36,12 +37,58 @@ void printArray(struct array *parr)
 
 void getArray(struct array *parr)
 {
-    
+    //Pedir el tamaño del arreglo parr que
+    //debe pedir el sistema al usuario
+    int tam; 
+    scanf("%d", &tam);
+    parr->size = tam; 
+
+    //Reservar el espacio de memoria en el Heap
+    parr->pdata = malloc(sizeof(int) * parr->size); 
+
+    //Pedir cada elemento y guardarlo en el arreglo
+    for (int i = 0; i < tam; i++)
+    {
+        int num;
+        scanf("%d", &num);
+        parr->pdata[i] = num;
+    }
 }
 
 void arrayCommon(struct array *arrIn1, struct array *arrIn2, struct array *arrOut)
 {
-    
+    //Reservar el espacio de memoria
+    arrOut->pdata = malloc(sizeof(int));
+    int tam = 0;
+   
+    for (int i = 0; i < arrIn1->size; i++)
+    {
+        for(int j= 0; j<arrIn2->size; j++)
+
+            if (*(arrIn1->pdata+i) == *(arrIn2->pdata+j))
+            {
+            
+                int bool = 0;
+                for (int k = 0; k < tam; k++)
+                {
+                    if (*(arrOut->pdata + k) == *(arrIn1 -> pdata + i))
+                    {
+                        bool = 1; 
+                    }
+                }
+
+                if (bool != 1)
+                {
+                    *(arrOut->pdata + tam) = *(arrIn1->pdata + i);
+                        tam++;         
+                }
+
+                bool = 0; 
+            }      
+    }
+
+    arrOut->size = tam;
+    arrOut->pdata = realloc(arrOut->pdata, sizeof(int) * tam);
 }
 
 void freeMemory(struct array *arr1, struct array *arr2, struct array *arr3)
